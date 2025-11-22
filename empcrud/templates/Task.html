@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block  content %}
+<div class='row'>
+    <div class = 'col-sm-8 offset-2'>
+        <h4 class="alert alert-info">Assign Task</h4>
+            <form method="post" action="{% url 'Task' %}">
+                    {% csrf_token %}
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Task Details</h3>
+                    </div>
+                    {{form.as_p}}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{% url 'detail' %}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <input type='submit' class='btn btn-success' value='Assign'>
+                    </div>
+            </form> 
+        </h4>
+    </div>      
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class ="col-md-12">
+    <div class="col-md-4">
+        <h2 class="mt-4">Department Details</h2>
+    </div>
+</div>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            
+            <th>Department</th>
+            <th>Position</th>
+            <th>Number of Employee</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dep , total in combined_data %}
+        <tr>
+            
+            <td>{{ dep.emp_department }}</td>
+            <td>{{dep.emp_position}}</td>
+            <td>{{ total.emp_department.count }}</td>
+            
+           
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock  %}

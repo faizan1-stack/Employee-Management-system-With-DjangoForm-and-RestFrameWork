@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+{% if user.is_staff %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mt-4">Employee Details</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp in employees_with_users %}
+                    <tr>
+                        <td>{{ emp.emp_id }}</td>
+                        <td>{{ emp.emp_user }}</td>
+                        <td>{{ emp.emp_position }}</td>
+                        <td>{{ emp.emp_department }}</td>
+                        <td>{{ emp.emp_user.email }}</td>
+                        <td>{{ emp.emp_user.Phone_number }}</td>
+                        <td>
+                            <a href="{% url 'edit_profile' emp.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                            <form method="post" action="{% url 'delete_profile' emp.pk %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this employee?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-sm-12">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+</div>
+{%endif%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% if user.is_staff %}
+<script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for dept in department_counts %}'{{ dept.name }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Mian Brother Company',
+                data: [{% for dept in department_counts %}{{ dept.employee_count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Department',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                title: {
+                    display: true,
+                    text: 'Employee Count by Department'
+                }
+            }
+        }
+    });
+</script>
+{%endif%}
+{% if user.is_staff %}
+<h2 class="mt-5">Project Details</h2>
+<div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Project_id</th>
+                        <th>Project_name</th>
+                        <th>Project_lead</th>
+                        <th>Project_Status</th>
+                        <th>Add Task</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pro in project %}
+                    <tr>
+                        <td>{{ pro.project_id }}</td>
+                        <td>{{ pro.project_name }}</td>
+                        <td>{{ pro.project_lead }}</td>
+                        <td>{{ pro.project_status }}</td>
+                        <td>
+                            <form method="post" action="{% url 'Task'  %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-primary" >Add Task</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" action="{% url 'project_delete' pro.pk %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+                </tbody>
+            </table>
+     </div>
+</div>
+{%endif%}
+{% endblock %}

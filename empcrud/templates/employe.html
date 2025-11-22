@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {% if employee %}
+            <h2 class="mt-4">Welcome {{ employee.emp_user.username }} - {{ employee.emp_department }} - {{ employee.emp_position }}</h2>
+            {% else %}
+            <h2 class="mt-4">Welcome {{request.user.username}} - No employee record found</h2>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}
